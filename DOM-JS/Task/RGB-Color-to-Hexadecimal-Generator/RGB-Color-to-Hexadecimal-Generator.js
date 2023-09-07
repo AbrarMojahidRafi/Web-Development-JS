@@ -21,3 +21,15 @@ btn.addEventListener("click", function () {
   const hex = rgbToHex(r, g, b);
   document.getElementById("output-Hexadecimal").value = hex;
 });
+
+document.getElementById("copy-btn-RGB").addEventListener("click", function () {
+  const value = document.getElementById("output-RGB").value;
+  navigator.clipboard.writeText(value);
+});
+
+document
+  .getElementById("copy-btn-Hexadecimal")
+  .addEventListener("click", function () {
+    const value = document.getElementById("output-Hexadecimal").value;
+    navigator.clipboard.writeText(value);
+  });
