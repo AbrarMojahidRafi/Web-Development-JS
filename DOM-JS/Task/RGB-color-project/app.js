@@ -13,6 +13,9 @@ const colorSliderBlue = document.getElementById("color-slider-blue");
 const copyButton = document.getElementById("copy-to-clipboard");
 const radioButtonHex = document.getElementById("color-mode-Hex");
 const radioButtonRGB = document.getElementById("color-mode-rgb");
+const saveButton = document.getElementById("save-to-custom");
+const customColors = document.getElementById("custom-colors");
+const presetColor = document.getElementById("preset-colors");
 
 let redColorCodeRGB = colorSliderRedLabel.textContent;
 let greenColorCodeRGB = colorSliderGreenLabel.textContent;
@@ -27,6 +30,11 @@ function setRGBColorsToTheColorDisplayAsA_backgroundColor(
 ) {
   colorDisplay.style.backgroundColor = `rgb(${redColorCodeRGB}, ${greenColorCodeRGB}, ${blueColorCodeRGB})`;
   inputRGB.value = `rgb(${redColorCodeRGB}, ${greenColorCodeRGB}, ${blueColorCodeRGB})`;
+  inputHex.value = rgbToHex(
+    redColorCodeRGB,
+    greenColorCodeRGB,
+    blueColorCodeRGB
+  );
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -110,10 +118,20 @@ function rgbColorGenerator() {
 }
 
 //////////////////////////////////////////////////////////////////////////
+// rgb to hex
 
 function rgbToHex(r, g, b) {
   return ((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1);
 }
+// hex to rgb
+const hex2rgb = (hex) => {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+
+  // return {r, g, b}
+  return { r, g, b };
+};
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -125,21 +143,118 @@ function Adjust_RGB_Colors_levels_value_update() {
 }
 
 //////////////////////////////////////////////////////////////////////////
-// copy function
+// copy button
 
 copyButton.addEventListener("click", function () {
-  console.log("Clicked");
+  checkRadioButton();
 });
 
+function checkRadioButton() {
+  if (document.getElementById("color-mode-hex").checked) {
+    navigator.clipboard.writeText(`#${inputHex.value}`);
+    document.getElementById("color-mode-hex").checked = false;
+  } else if (document.getElementById("color-mode-rgb").checked) {
+    navigator.clipboard.writeText(inputRGB.value);
+    document.getElementById("color-mode-rgb").checked = false;
+  }
+}
+
 //////////////////////////////////////////////////////////////////////////
+// save button
 
-// const copyButton = document.getElementById("copy-to-clipboard");
-// const radioButtonHex = document.getElementById("color-mode-Hex");
-// const radioButtonRGB = document.getElementById("color-mode-rgb");
+saveButton.addEventListener("click", function () {});
 
-// radioButtonRGB.checked = True;
-// if (radioButtonHex.ariaChecked) {
-//   console.log("Hexadecimal is clicked");
-// } else if (radioButtonRGB.ariaChecked) {
-//   console.log("rgb is clicked");
-// }
+//////////////////////////////////////////////////////////////////////////
+// preset work
+
+const defaultColor = {
+  red: 221,
+  green: 222,
+  blue: 238,
+};
+
+const defaultPresetColors = [
+  "#ffcdd2",
+  "#f8bbd0",
+  "#e1bee7",
+  "#ff8a80",
+  "#ff80ab",
+  "#ea80fc",
+  "#b39ddb",
+  "#9fa8da",
+  "#90caf9",
+  "#b388ff",
+  "#8c9eff",
+  "#82b1ff",
+  "#03a9f4",
+  "#00bcd4",
+  "#009688",
+  "#80d8ff",
+  "#84ffff",
+  "#a7ffeb",
+  "#c8e6c9",
+  "#dcedc8",
+  "#f0f4c3",
+  "#b9f6ca",
+  "#ccff90",
+  "#ffcc80",
+];
+
+for (let i = 0; i < defaultPresetColors.length; i++) {
+  // create div
+  const div = createDiv(defaultPresetColors[i]);
+  // add to the preset div
+  presetColor.appendChild(div);
+}
+
+//////////////////////////////////////////////////////////////////////////
+// div create
+
+function createDiv(clr_hex) {
+  const div = document.createElement("div");
+  div.className = "color-box";
+  div.style.backgroundColor = clr_hex;
+  // div.setAttribute("data-color", color);
+  div.addEventListener("click", function () {
+    const rgb = hex2rgb(clr_hex); // return {r: 225, g: 190, b: 231}
+    // display it and write it in the hex input and rgb input box
+    setRGBColorsToTheColorDisplayAsA_backgroundColor(
+      rgb["r"],
+      rgb["g"],
+      rgb["b"]
+    );
+    // adjust rgb colors updates with value and button
+    colorSliderRed.value = `${rgb["r"]}`;
+    colorSliderGreen.value = `${rgb["g"]}`;
+    colorSliderBlue.value = `${rgb["b"]}`;
+    colorSliderRedLabel.innerText = rgb["r"];
+    colorSliderGreenLabel.innerText = rgb["g"];
+    colorSliderBlueLabel.innerText = rgb["b"];
+  });
+
+  return div;
+}
+
+//////////////////////////////////////////////////////////////////////////
+// custom color work
+
+let countNumberOfCUSTOM_Colors = 0;
+
+saveButton.addEventListener("click", function () {
+  if (countNumberOfCUSTOM_Colors < 24) {
+    // convert rgb to hex
+    const hex = rgbToHex(redColorCodeRGB, greenColorCodeRGB, blueColorCodeRGB);
+    // create div
+    const div = createDiv(`#${hex}`);
+    // set it to it's location
+    customColors.appendChild(div);
+    countNumberOfCUSTOM_Colors += 1;
+  }
+});
+
+// const customColors = document.getElementById("custom-colors");
+// const saveButton = document.getElementById("save-to-custom");
+
+// let redColorCodeRGB = colorSliderRedLabel.textContent;
+// let greenColorCodeRGB = colorSliderGreenLabel.textContent;
+// let blueColorCodeRGB = colorSliderBlueLabel.textContent;
