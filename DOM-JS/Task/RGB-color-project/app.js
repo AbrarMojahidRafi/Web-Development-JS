@@ -10,6 +10,9 @@ const colorSliderBlueLabel = document.getElementById("color-slider-blue-label");
 const colorSliderRed = document.getElementById("color-slider-red");
 const colorSliderGreen = document.getElementById("color-slider-green");
 const colorSliderBlue = document.getElementById("color-slider-blue");
+const copyButton = document.getElementById("copy-to-clipboard");
+const radioButtonHex = document.getElementById("color-mode-Hex");
+const radioButtonRGB = document.getElementById("color-mode-rgb");
 
 let redColorCodeRGB = colorSliderRedLabel.textContent;
 let greenColorCodeRGB = colorSliderGreenLabel.textContent;
@@ -122,3 +125,21 @@ function Adjust_RGB_Colors_levels_value_update() {
 }
 
 //////////////////////////////////////////////////////////////////////////
+// copy function
+
+copyButton.addEventListener("click", function () {
+  console.log("Clicked");
+});
+
+//////////////////////////////////////////////////////////////////////////
+
+// const copyButton = document.getElementById("copy-to-clipboard");
+// const radioButtonHex = document.getElementById("color-mode-Hex");
+// const radioButtonRGB = document.getElementById("color-mode-rgb");
+
+// radioButtonRGB.checked = True;
+// if (radioButtonHex.ariaChecked) {
+//   console.log("Hexadecimal is clicked");
+// } else if (radioButtonRGB.ariaChecked) {
+//   console.log("rgb is clicked");
+// }
