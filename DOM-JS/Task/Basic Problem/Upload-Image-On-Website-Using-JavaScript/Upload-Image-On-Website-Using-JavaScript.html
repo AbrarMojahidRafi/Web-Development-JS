@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="file" />
+
+    <br />
+
+    <img id="myImg" src="#" />
+
+    <script>
+      window.addEventListener("load", function () {
+        document
+          .querySelector('input[type="file"]')
+          .addEventListener("change", function () {
+            if (this.files && this.files[0]) {
+              varimg = document.getElementById("img_content");
+              img.onload = () => {
+                URL.revokeObjectURL(img.src);
+              };
+              img.src = URL.createObjectURL(this.files[0]);
+            }
+          });
+      });
+    </script>
+  </body>
+</html>

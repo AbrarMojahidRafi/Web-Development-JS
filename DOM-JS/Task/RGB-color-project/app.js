@@ -18,6 +18,7 @@ const customColors = document.getElementById("custom-colors");
 const presetColor = document.getElementById("preset-colors");
 const bgFileInputBtn = document.getElementById("bg-file-input-btn");
 const bgFileInput = document.getElementById("bg-file-input");
+const backgroundPreview = document.getElementById("background-preview");
 
 let redColorCodeRGB = colorSliderRedLabel.textContent;
 let greenColorCodeRGB = colorSliderGreenLabel.textContent;
@@ -265,6 +266,17 @@ saveButton.addEventListener("click", function () {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bgFileInputBtn.addEventListener("click", function () {
-  const file = bgFileInput.files;
-  console.log("clicked");
+  bgFileInput.click();
+
+  bgFileInput.addEventListener("change", function (e) {
+    const file = e.target.files[0];
+    const url = URL.createObjectURL(file);
+    // console.log(url);
+    backgroundPreview.style.background = `url(${url})`;
+    document.body.style.background = `url(${url})`;
+  });
 });
+
+// const bgFileInputBtn = document.getElementById("bg-file-input-btn");
+// const bgFileInput = document.getElementById("bg-file-input");
+// const backgroundPreview = document.getElementById("background-preview");
