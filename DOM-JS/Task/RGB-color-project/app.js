@@ -19,6 +19,14 @@ const presetColor = document.getElementById("preset-colors");
 const bgFileInputBtn = document.getElementById("bg-file-input-btn");
 const bgFileInput = document.getElementById("bg-file-input");
 const backgroundPreview = document.getElementById("background-preview");
+const bgFileDeleteBtn = document.getElementById("bg-file-delete-btn");
+bgFileDeleteBtn.style.display = "None";
+const bgSize = document.getElementById("bg-size");
+const bgRepeat = document.getElementById("bg-repeat");
+const bgPosition = document.getElementById("bg-position");
+const bgAttachment = document.getElementById("bg-attachment");
+const bgController = document.getElementById("bg-controller");
+bgController.style.display = "none";
 
 let redColorCodeRGB = colorSliderRedLabel.textContent;
 let greenColorCodeRGB = colorSliderGreenLabel.textContent;
@@ -147,9 +155,51 @@ function Adjust_RGB_Colors_levels_value_update() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 // copy button
+// function createToastMsg() {
+//   const div = document.createElement("div");
+//   div.innerText = "Copied";
+//   div.className = "toast-message";
+// }
+
+const notifications = document.querySelector(".notifications"),
+  buttons = document.querySelectorAll(".section-header-action");
+
+const toastDetails = {
+  timer: 5000,
+  success: {
+    icon: "fa-circle-check",
+    text: "Hello World: This is a success toast.",
+  },
+};
+
+const removeToast = (toast) => {
+  toast.classList.add("hide");
+  if (toast.timeoutId) clearTimeout(toast.timeoutId);
+  setTimeout(() => toast.remove(), 500);
+};
+
+const createToast = (id) => {
+  const { icon, text } = toastDetails[id];
+  const toast = document.createElement("li");
+  toast.className = `toast ${id}`;
+  toast.innerHTML = `<div class="column">
+                         <i class="fa-solid ${icon}"></i>
+                         <span>${text}</span>
+                      </div>
+                      <i class="fa-solid fa-xmark" onclick="removeToast(this.parentElement)"></i>`;
+  notifications.appendChild(toast);
+  toast.timeoutId = setTimeout(() => removeToast(toast), toastDetails.timer);
+};
+
+buttons.forEach((btn) => {
+  btn.addEventListener("click", () => createToast(btn.id));
+});
+
+/////////////////////////////////
 
 copyButton.addEventListener("click", function () {
   checkRadioButton();
+  // createToastMsg();
 });
 
 function checkRadioButton() {
@@ -242,28 +292,57 @@ function createDiv(clr_hex) {
 // custom color work
 
 let countNumberOfCUSTOM_Colors = 0;
+let listOfAdded_CUSTOM_Colors = [];
+
+function checkItIsAlreadyAddedOrNot(hex) {
+  if (listOfAdded_CUSTOM_Colors.indexOf(hex) === -1) {
+    return true;
+  }
+  return false;
+}
 
 saveButton.addEventListener("click", function () {
-  if (countNumberOfCUSTOM_Colors < 24) {
-    // convert rgb to hex
-    const hex = rgbToHex(redColorCodeRGB, greenColorCodeRGB, blueColorCodeRGB);
-    // create div
-    const div = createDiv(`#${hex}`);
-    // set it to it's location
-    customColors.appendChild(div);
-    countNumberOfCUSTOM_Colors += 1;
+  // convert rgb to hex
+  const hex = rgbToHex(redColorCodeRGB, greenColorCodeRGB, blueColorCodeRGB);
+
+  if (checkItIsAlreadyAddedOrNot(hex)) {
+    listOfAdded_CUSTOM_Colors.push(hex);
+    if (countNumberOfCUSTOM_Colors < 24) {
+      // create div
+      const div = createDiv(`#${hex}`);
+      // set it to it's location
+      customColors.appendChild(div);
+      // append the hex color in the listOfAdded_CUSTOM_Colors:
+      countNumberOfCUSTOM_Colors += 1;
+    } else {
+      customColors.removeChild(customColors.firstElementChild);
+      // convert rgb to hex
+      const hex = rgbToHex(
+        redColorCodeRGB,
+        greenColorCodeRGB,
+        blueColorCodeRGB
+      );
+      // create div
+      const div = createDiv(`#${hex}`);
+      // set it to it's location
+      customColors.appendChild(div);
+    }
+    // listOfAdded_CUSTOM_Colors.push
   } else {
-    customColors.removeChild(customColors.firstElementChild);
-    // convert rgb to hex
-    const hex = rgbToHex(redColorCodeRGB, greenColorCodeRGB, blueColorCodeRGB);
-    // create div
-    const div = createDiv(`#${hex}`);
-    // set it to it's location
-    customColors.appendChild(div);
+    console.log("You Already Added");
   }
+  console.log(listOfAdded_CUSTOM_Colors);
 });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Background color upload and remove
+
+const s = document.body.style.backgroundSize;
+const r = document.body.style.backgroundRepeat;
+const p = document.body.style.backgroundPosition;
+const a = document.body.style.backgroundAttachment;
+
+let backgroundByDefaultColorCode = document.body.style.background;
 
 bgFileInputBtn.addEventListener("click", function () {
   bgFileInput.click();
@@ -273,10 +352,57 @@ bgFileInputBtn.addEventListener("click", function () {
     const url = URL.createObjectURL(file);
     // console.log(url);
     backgroundPreview.style.background = `url(${url})`;
+    // backgroundByDefaultColorCode = document.body.style.background;
     document.body.style.background = `url(${url})`;
+    // console.log(backgroundByDefaultColorCode);
+    bgFileDeleteBtn.style.display = null;
+    bgController.style.display = null;
+  });
+
+  bgSize.addEventListener("change", function () {
+    changeBackground();
+  });
+
+  bgRepeat.addEventListener("change", function () {
+    changeBackground();
+  });
+
+  bgPosition.addEventListener("change", function () {
+    changeBackground();
+  });
+
+  bgAttachment.addEventListener("change", function () {
+    changeBackground();
   });
 });
 
-// const bgFileInputBtn = document.getElementById("bg-file-input-btn");
-// const bgFileInput = document.getElementById("bg-file-input");
-// const backgroundPreview = document.getElementById("background-preview");
+bgFileDeleteBtn.addEventListener("click", function () {
+  document.body.style.background = backgroundByDefaultColorCode;
+  backgroundPreview.style.background = backgroundByDefaultColorCode;
+  bgFileDeleteBtn.style.display = "None";
+  bgController.style.display = "none";
+
+  document.body.style.backgroundSize = s;
+  document.body.style.backgroundRepeat = r;
+  document.body.style.backgroundPosition = p;
+  document.body.style.backgroundAttachment = a;
+});
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function changeBackground() {
+  document.body.style.backgroundSize = bgSize.value;
+  // console.log(bgSize.value);
+  document.body.style.backgroundRepeat = bgRepeat.value;
+  // console.log(bgRepeat.value);
+  document.body.style.backgroundPosition = bgPosition.value;
+  // console.log(bgPosition.value);
+  document.body.style.backgroundAttachment = bgAttachment.value;
+  // console.log(bgAttachment.value);
+}
+
+// const bgSize = document.getElementById("bg-size")
+// const bgRepeat = document.getElementById("bg-repeat")
+// const bgPosition = document.getElementById("bg-position")
+// const bgAttachment = document.getElementById("bg-attachment")
+// const bgController = document.getElementById("bg-controller")
