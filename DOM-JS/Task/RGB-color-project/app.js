@@ -155,51 +155,15 @@ function Adjust_RGB_Colors_levels_value_update() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 // copy button
-// function createToastMsg() {
-//   const div = document.createElement("div");
-//   div.innerText = "Copied";
-//   div.className = "toast-message";
-// }
-
-const notifications = document.querySelector(".notifications"),
-  buttons = document.querySelectorAll(".section-header-action");
-
-const toastDetails = {
-  timer: 5000,
-  success: {
-    icon: "fa-circle-check",
-    text: "Hello World: This is a success toast.",
-  },
-};
-
-const removeToast = (toast) => {
-  toast.classList.add("hide");
-  if (toast.timeoutId) clearTimeout(toast.timeoutId);
-  setTimeout(() => toast.remove(), 500);
-};
-
-const createToast = (id) => {
-  const { icon, text } = toastDetails[id];
-  const toast = document.createElement("li");
-  toast.className = `toast ${id}`;
-  toast.innerHTML = `<div class="column">
-                         <i class="fa-solid ${icon}"></i>
-                         <span>${text}</span>
-                      </div>
-                      <i class="fa-solid fa-xmark" onclick="removeToast(this.parentElement)"></i>`;
-  notifications.appendChild(toast);
-  toast.timeoutId = setTimeout(() => removeToast(toast), toastDetails.timer);
-};
-
-buttons.forEach((btn) => {
-  btn.addEventListener("click", () => createToast(btn.id));
-});
-
-/////////////////////////////////
+function createToastMsg() {
+  const div = document.createElement("div");
+  div.innerText = "Copied";
+  div.className = "toast-message";
+}
 
 copyButton.addEventListener("click", function () {
   checkRadioButton();
-  // createToastMsg();
+  createToastMsg();
 });
 
 function checkRadioButton() {
