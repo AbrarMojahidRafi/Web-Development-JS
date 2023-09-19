@@ -56,4 +56,9 @@ button {
 }
 #output span {
   font-size: 0.9em;
+  color: #4470f3;
+}
+
+h2 {
+  text-align: center;
 }

@@ -7,8 +7,6 @@ const romanObject = {
   XC: 90,
   L: 50,
   XL: 40,
-  XXX: 30,
-  XX: 20,
   X: 10,
   IX: 9,
   V: 5,
@@ -20,22 +18,32 @@ const input = document.getElementById("input");
 const submit = document.getElementById("submit");
 
 submit.addEventListener("click", function () {
-  console.log("clicked");
+  // console.log("clicked");
   // get the value of input
   inputValue = input.value;
-  console.log(inputValue, typeof inputValue);
+  // console.log(inputValue, typeof inputValue);
 
-  let s = "";
-  // loop: into the dictionary
-  for (var i = inputValue.length - 1; i >= 0; i++) {
-    iv = Number(inputValue[i]);
-    for (let key in romanObject) {
-      if (iv == romanObject[key]) {
-        s = key + s;
-        break;
+  if (inputValue != "") {
+    // loop: into the dictionary
+    function romanize(num) {
+      (roman = ""), i;
+      for (var i in romanObject) {
+        while (num >= romanObject[i]) {
+          roman += i;
+          num -= romanObject[i];
+        }
       }
+      return roman;
     }
-  }
-  console.log(s);
-});
 
+    const romanNumberIs = romanize(Number(inputValue));
+
+    const span = document.getElementsByTagName("span")[0];
+
+    // console.log(span);
+
+    span.textContent = romanNumberIs;
+  } else {
+    alert("Please Enter a number !");
+  }
+});
