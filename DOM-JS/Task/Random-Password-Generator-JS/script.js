@@ -20,7 +20,6 @@ function passwordLengthGenerator() {
   return lengthPassword.value;
 }
 
-
 function genPassword() {
   // generate a password using the length and checkboxes.
   // show the password in the "passwordBox"
