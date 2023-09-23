@@ -23,6 +23,9 @@ function passwordLengthGenerator() {
 }
 
 function genPassword(passwordLength) {
+  // toast message deleted
+  document.getElementById("toast").style.display = "none";
+
   // generate a password using the length and checkboxes.
   const passLen = passwordLength;
   let password = "";
@@ -56,19 +59,26 @@ function genPassword(passwordLength) {
 
   // show the password in the "passwordBox"
   if (password.length === passLen) {
-    console.log(password);
-    console.log(password.length);
+    // console.log(password);
+    // console.log(password.length);
     passwordBox.textContent = password;
   } else {
     password = password.slice(0, passLen);
-    console.log(password);
-    console.log(password.length);
+    // console.log(password);
+    // console.log(password.length);
     passwordBox.textContent = password;
   }
 }
 
 function copyPassword() {
   navigator.clipboard.writeText(passwordBox.textContent);
+  // console.log(passwordBox.textContent);
+  if (passwordBox.textContent === "") {
+    alert("Before generating the password, You can't able to copy it.");
+  } else {
+    document.getElementById("toast").style.display = null;
+    // console.log(document.getElementsByTagName("i")[0]);
+  }
 }
 
 function createPassword() {
@@ -91,7 +101,7 @@ function createPassword() {
 
     // know the length of a password
     const passwordLength = passwordLengthGenerator();
-    console.log(passwordLength);
+    // console.log(passwordLength);
 
     genPassword(passwordLength);
   }
