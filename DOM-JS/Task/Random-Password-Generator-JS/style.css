@@ -70,3 +70,8 @@ input[type="range"] {
   background-color: #e2e2e2;
   border-radius: 4px;
 }
+
+i {
+  cursor: pointer;
+  border-radius: 4px;
+}
