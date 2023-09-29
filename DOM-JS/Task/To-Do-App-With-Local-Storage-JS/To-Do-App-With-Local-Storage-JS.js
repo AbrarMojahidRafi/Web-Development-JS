@@ -11,5 +11,3 @@ addButton.addEventListener("click", function () {
   tasks.appendChild(new_div);
   console.log("clicked");
 });
-
-
